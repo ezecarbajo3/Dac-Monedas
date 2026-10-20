@@ -1,0 +1,388 @@
+/**
+ * Dac Monedas — Helpers compartidos entre el catálogo, la ficha y el carrito.
+ * Soporta configuración de marca (config.json) y conversión USD / ARS.
+ *
+ * Se carga con `defer` ANTES de script.js / detalle.js en todas las páginas.
+ */
+
+// ─── Preferencias del sistema ────────────────────────────────────────────────
+function prefersReducedMotion() {
+  return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+// ─── Configuración de negocio (Dac Monedas) ──────────────────────────────────
+const SITE_DEFAULTS = {
+  negocio: 'Dac Monedas',
+  negocio_linea1: 'Dac',
+  negocio_linea2: 'Monedas',
+  monograma: 'DM',
+  eslogan: 'Monedas de colección argentinas y del mundo',
+  aviso_superior: 'Entregas todos los domingos en Parque Rivadavia · Envíos a todo el país',
+  titular: 'Diego Arnaldo Cepeda',
+  alias: 'diego.boca.pasion',
+  alias_banco: 'Mercado Pago',
+  email: 'dacmonedas@gmail.com',
+  whatsapp: '5491154028935',
+  whatsapp_visible: '+54 9 11 5402-8935',
+  instagram: '',
+  facebook: '',
+  entrega: {
+    lugar: 'Parque Rivadavia (CABA)',
+    dia_semana: 0,
+    dia_nombre: 'domingo',
+    costo: 0
+  },
+  a_pedido_max: 10,
+  precio_economicas: 10,
+  dias_vendida_visible: 30,
+  dias_nuevo: 7,
+};
+
+let SITE_CONFIG = { ...SITE_DEFAULTS };
+
+const configReady = fetch('config.json')
+  .then(r => (r.ok ? r.json() : {}))
+  .catch(() => ({}))
+  .then((data) => {
+    SITE_CONFIG = {
+      ...SITE_DEFAULTS,
+      ...data,
+      entrega: { ...SITE_DEFAULTS.entrega, ...(data && data.entrega) },
+    };
+    applyConfigToPage();
+    window.dispatchEvent(new CustomEvent('site:config-ready', { detail: SITE_CONFIG }));
+    return SITE_CONFIG;
+  });
+
+function cfg() {
+  return SITE_CONFIG;
+}
+
+function whatsappURL(text) {
+  const num = String(cfg().whatsapp || '5491154028935').replace(/\D/g, '');
+  const base = `https://wa.me/${num}`;
+  return text ? `${base}?text=${encodeURIComponent(text)}` : base;
+}
+
+function applyConfigToPage() {
+  const c = cfg();
+  document.querySelectorAll('[data-cfg]').forEach((el) => {
+    const val = c[el.dataset.cfg];
+    if (val != null && val !== '') {
+      el.textContent = val;
+      el.hidden = false;
+    } else if (el.hasAttribute('data-cfg-optional')) {
+      el.hidden = true;
+    }
+  });
+
+  document.querySelectorAll('[data-cfg-href]').forEach((el) => {
+    const key = el.dataset.cfgHref;
+    if (key === 'whatsapp') {
+      const href = c.whatsapp ? whatsappURL() : '';
+      if (href) {
+        el.href = href;
+        el.hidden = false;
+      } else {
+        el.hidden = true;
+      }
+    } else if (c[key]) {
+      el.href = c[key];
+      el.hidden = false;
+    } else {
+      el.hidden = true;
+    }
+  });
+}
+
+// ─── Constantes de catálogo ──────────────────────────────────────────────────
+const SOLD_RETENTION_DAYS = 30;
+const SOLD_RETENTION_MS   = SOLD_RETENTION_DAYS * 24 * 60 * 60 * 1000;
+const NEW_BADGE_DAYS      = 7;
+
+function stockOf(coin) {
+  if (!coin) return 0;
+  if (coin.status === 'sold') return 0;
+  const n = Number(coin.stock);
+  return Number.isFinite(n) ? Math.max(0, Math.floor(n)) : 1;
+}
+
+function isAPedido(coin) {
+  return !!(coin && coin.a_pedido);
+}
+
+function isCoinSold(coin) {
+  if (!coin) return false;
+  if (coin.status === 'sold') return true;
+  return stockOf(coin) <= 0 && !isAPedido(coin);
+}
+
+function isSoldExpired(coin) {
+  if (!isCoinSold(coin) || !coin.soldAt) return false;
+  const ts = new Date(coin.soldAt).getTime();
+  return Number.isFinite(ts) && (Date.now() - ts > SOLD_RETENTION_MS);
+}
+
+function isCoinPubliclyVisible(coin) {
+  return !!coin && !coin.hidden && !isSoldExpired(coin);
+}
+
+function parsePriceUSD(priceStr) {
+  if (typeof priceStr === 'number') return Number.isFinite(priceStr) && priceStr > 0 ? priceStr : Infinity;
+  if (!priceStr) return Infinity;
+  const n = parseFloat(String(priceStr).replace(/,/g, '.').replace(/[^\d.]/g, ''));
+  return isNaN(n) ? Infinity : n;
+}
+
+// ─── Moneda y Conversión (USD / ARS) ──────────────────────────────────────────
+const CURRENCY_STORAGE_KEY = 'dac_currency_pref';
+const DOLAR_FALLBACK_VENTA = 1495;
+
+let activeCurrency = 'USD';
+try {
+  const saved = localStorage.getItem(CURRENCY_STORAGE_KEY);
+  if (saved === 'ARS' || saved === 'USD') {
+    activeCurrency = saved;
+  }
+} catch (_) {}
+
+function getCurrency() {
+  return activeCurrency;
+}
+
+function getBlueRate() {
+  if (window.DacCart && typeof window.DacCart.getBlueRate === 'function') {
+    const rate = window.DacCart.getBlueRate();
+    if (Number.isFinite(rate) && rate > 0) return rate;
+  }
+  if (window.PopperCart && typeof window.PopperCart.getBlueRate === 'function') {
+    const rate = window.PopperCart.getBlueRate();
+    if (Number.isFinite(rate) && rate > 0) return rate;
+  }
+  return DOLAR_FALLBACK_VENTA;
+}
+
+function setCurrency(curr) {
+  if (curr !== 'ARS' && curr !== 'USD') return;
+  activeCurrency = curr;
+  try {
+    localStorage.setItem(CURRENCY_STORAGE_KEY, curr);
+  } catch (_) {}
+  const eventDetail = { currency: curr, rate: getBlueRate() };
+  window.dispatchEvent(new CustomEvent('dac:currency-changed', { detail: eventDetail }));
+  window.dispatchEvent(new CustomEvent('popper:currency-changed', { detail: eventDetail }));
+}
+
+function toggleCurrency() {
+  const next = (activeCurrency === 'USD') ? 'ARS' : 'USD';
+  setCurrency(next);
+  return next;
+}
+
+function roundPriceARS(amount) {
+  const val = Number(amount);
+  if (!Number.isFinite(val) || val <= 0) return 0;
+  if (val <= 10000) {
+    return Math.max(100, Math.round(val / 100) * 100);
+  }
+  if (val <= 50000) {
+    return Math.round(val / 500) * 500;
+  }
+  return Math.round(val / 1000) * 1000;
+}
+
+function formatPriceARS(amount) {
+  return '$' + roundPriceARS(amount).toLocaleString('es-AR');
+}
+
+function formatCoinPrice(coin, currency = getCurrency(), rate = getBlueRate()) {
+  if (!coin) return '';
+  if (isCoinSold(coin)) return 'VENDIDO';
+  if (!coin.price || String(coin.price).trim().toLowerCase() === 'consultar') {
+    return 'Consultar';
+  }
+
+  if (currency === 'ARS') {
+    const curUSD = parsePriceUSD(coin.price);
+    if (!Number.isFinite(curUSD) || curUSD <= 0) {
+      return escapeHTML(coin.price);
+    }
+    const curARS = formatPriceARS(curUSD * rate);
+
+    if (coin.original_price) {
+      const origUSD = parsePriceUSD(coin.original_price);
+      if (Number.isFinite(origUSD) && origUSD > 0) {
+        const origARS = formatPriceARS(origUSD * rate);
+        return `<span class="price-original">${origARS}</span> <span class="price-current">${curARS}</span>`;
+      }
+    }
+    return curARS;
+  }
+
+  // USD (por defecto)
+  const priceDisplay = typeof coin.price === 'number' ? `${coin.price} USD` : String(coin.price);
+  if (coin.original_price) {
+    const origDisplay = typeof coin.original_price === 'number' ? `${coin.original_price} USD` : String(coin.original_price);
+    return `<span class="price-original">${escapeHTML(origDisplay)}</span> <span class="price-current">${escapeHTML(priceDisplay)}</span>`;
+  }
+  return escapeHTML(priceDisplay);
+}
+
+window.DacCurrency = window.PopperCurrency = {
+  get: getCurrency,
+  set: setCurrency,
+  toggle: toggleCurrency,
+  getRate: getBlueRate,
+  formatPrice: formatCoinPrice,
+  formatARS: formatPriceARS,
+  roundARS: roundPriceARS,
+};
+
+// ─── Estado de conservación ──────────────────────────────────────────────────
+const GRADE_RANK_MAP = {
+  'R-':4,'R':5,'R+':6,
+  'B-':7,'B':8,'B+':9,
+  'MB-':10,'MB':11,'MB+':12,
+  'EX-':13,'EBC-':13,
+  'EX':14,'EBC':14,
+  'EX+':15,'EBC+':15,
+  'SC':16,'UNC':16,'FDC':16,'MS':16,
+};
+
+function gradeRank(coin) {
+  const raw = String(coin.grade_short || '').trim().replace(/\s+/g, '').toUpperCase().replace(/\*+$/, '');
+  if (raw && raw !== '-' && GRADE_RANK_MAP[raw] !== undefined) return GRADE_RANK_MAP[raw];
+
+  const g = String(coin.grade || '').toUpperCase();
+  const hasMinus = /[-]\s*$| -/.test(g);
+  const hasPlus  = /[+]\s*$| \+/.test(g);
+  const mod = hasMinus ? '-' : hasPlus ? '+' : '';
+  if (/^SIN\s*CIRC|^SC\b|^UNC\b|^FDC\b/i.test(g))   return GRADE_RANK_MAP['SC'];
+  if (/^EXCEL/i.test(g))  return GRADE_RANK_MAP['EX'  + mod] ?? GRADE_RANK_MAP['EX'];
+  if (/^MUY\s*B/i.test(g)) return GRADE_RANK_MAP['MB' + mod] ?? GRADE_RANK_MAP['MB'];
+  if (/^BUENO/i.test(g))  return GRADE_RANK_MAP['B'   + mod] ?? GRADE_RANK_MAP['B'];
+  if (/^REGULAR/i.test(g)) return GRADE_RANK_MAP['R'  + mod] ?? GRADE_RANK_MAP['R'];
+  return 0;
+}
+
+function getGradeShort(coin) {
+  return coin.grade_short || '';
+}
+
+// ─── Imágenes ────────────────────────────────────────────────────────────────
+function getImagesArray(coin) {
+  return Array.isArray(coin && coin.images) ? coin.images : [];
+}
+
+function getPrimaryImage(coin) {
+  const images = getImagesArray(coin);
+  if (images.length > 0) {
+    const imageA = images.find(img => {
+      const fileName = img.split('/').pop()?.toUpperCase() || '';
+      return fileName.includes('A.');
+    });
+    return imageA || images[0];
+  }
+  return '';
+}
+
+function thumbFor(src) {
+  if (!src || !src.startsWith('images/') || src.startsWith('images/thumbs/')) return src;
+  if (/\.mp4$/i.test(src)) return src;
+  const base = src.split('/').pop().replace(/\.[^.]+$/, '');
+  return `images/thumbs/${base}.webp`;
+}
+
+function handleImgError(img, maxTries = 2) {
+  const current = img.src.split('?')[0];
+  if (img.dataset.triedOriginal !== '1' && img.dataset.fullSrc && current.includes('/thumbs/')) {
+    img.dataset.triedOriginal = '1';
+    img.src = img.dataset.fullSrc;
+    return;
+  }
+  const tries = Number(img.dataset.retryTries || 0);
+  if (tries >= maxTries) return;
+  img.dataset.retryTries = String(tries + 1);
+  setTimeout(() => { img.src = `${current}?r=${Date.now()}`; }, 250 * (tries + 1));
+}
+
+function attachImgRetry(img, maxTries = 2) {
+  if (!img) return;
+  img.addEventListener('error', () => handleImgError(img, maxTries));
+}
+
+// ─── Títulos ─────────────────────────────────────────────────────────────────
+function splitCoinTitle(rawTitle) {
+  const title = String(rawTitle || '').trim();
+  if (!title) return { base: '', extra: '' };
+  const tokens = title.split(/\s+/);
+  const isYear = (t) => /^\(?(1[5-9]\d{2}|20\d{2})\)?$/.test(t);
+  const isAlpha = (t) => /[A-Za-zÀ-ÿ]/.test(t);
+
+  let yearIndex = -1, sawAlpha = false;
+  for (let i = 0; i < tokens.length; i++) {
+    if (isYear(tokens[i]) && sawAlpha) yearIndex = i;
+    if (isAlpha(tokens[i])) sawAlpha = true;
+  }
+
+  let cut;
+  if (yearIndex >= 0) {
+    cut = yearIndex;
+  } else if (!/^\d/.test(tokens[0])) {
+    cut = tokens.length - 1;
+  } else {
+    const firstAlpha = tokens.findIndex(isAlpha);
+    cut = firstAlpha === -1 ? tokens.length - 1 : firstAlpha;
+    while (cut + 1 < tokens.length && /\d{4}/.test(tokens[cut + 1])) cut++;
+  }
+  return {
+    base: tokens.slice(0, cut + 1).join(' '),
+    extra: tokens.slice(cut + 1).join(' '),
+  };
+}
+
+function applyCoinTitle(el, rawTitle) {
+  if (!el) return;
+  const { base, extra } = splitCoinTitle(rawTitle);
+  el.textContent = base;
+  if (extra) {
+    if (base) el.appendChild(document.createTextNode(' '));
+    const span = document.createElement('span');
+    span.className = 'coin-title-extra';
+    span.textContent = extra;
+    el.appendChild(span);
+  }
+}
+
+// ─── Reveal Animations ───────────────────────────────────────────────────────
+function revealWhenVisible(elements, threshold = 0.08) {
+  if (prefersReducedMotion() || !('IntersectionObserver' in window)) {
+    elements.forEach(el => el.classList.add('visible'));
+    return null;
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold });
+
+  elements.forEach(el => observer.observe(el));
+  return observer;
+}
+
+// ─── Escapeo HTML ────────────────────────────────────────────────────────────
+function escapeHTML(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  applyConfigToPage();
+});

@@ -1,0 +1,27 @@
+{
+  "_ayuda": "Datos del vendedor y configuración de Dac Monedas.",
+  "negocio": "Dac Monedas",
+  "negocio_linea1": "Dac",
+  "negocio_linea2": "Monedas",
+  "monograma": "DM",
+  "eslogan": "Monedas de colección argentinas y del mundo",
+  "aviso_superior": "Entregas todos los domingos en Parque Rivadavia · Envíos a todo el país",
+  "titular": "Diego Arnaldo Cepeda",
+  "alias": "diego.boca.pasion",
+  "alias_banco": "Mercado Pago",
+  "email": "dacmonedas@gmail.com",
+  "whatsapp": "5491154028935",
+  "whatsapp_visible": "+54 9 11 5402-8935",
+  "instagram": "",
+  "facebook": "",
+  "entrega": {
+    "lugar": "Parque Rivadavia (CABA)",
+    "dia_semana": 0,
+    "dia_nombre": "domingo",
+    "costo": 0
+  },
+  "a_pedido_max": 10,
+  "precio_economicas": 10,
+  "dias_vendida_visible": 30,
+  "dias_nuevo": 7
+}
