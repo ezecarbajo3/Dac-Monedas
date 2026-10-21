@@ -42,19 +42,19 @@
 
 :root {
   color-scheme: dark;
-  --bg: #030d22;
-  --bg-card: #081a3d;
-  --bg-card-alt: #0c234f;
-  --text: #f5f5f5;
-  --muted: #8ea8cf;
+  --bg: #001438;
+  --bg-card: #001e52;
+  --bg-card-alt: #00286e;
+  --text: #ffffff;
+  --muted: #9ec0f2;
   --border: rgba(var(--accent-rgb), 0.22);
   --accent: #fcb813;
   /* Los mismos componentes del dorado, sueltos, para poder escribir
      rgba(var(--accent-rgb), .18) donde antes había 111 rgba(var(--accent-rgb),…)
      literales con alfas distintos. */
   --accent-rgb: 252, 184, 19;
-  --accent-light: #ffd564;
-  --accent-dark: #c98e00;
+  --accent-light: #ffd54f;
+  --accent-dark: #e09900;
   --success: #25d366;
   --success-dark: #1faa52;
   --shadow: 0 18px 42px rgba(0, 0, 0, 0.65);
@@ -111,9 +111,9 @@ html {
 
 body {
   margin: 0;
-  font-family: "Cinzel", "Georgia", "Times New Roman", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   color: var(--text);
-  background: radial-gradient(ellipse at 50% 0%, #0c2656 0%, #041129 55%, #020817 100%);
+  background: radial-gradient(ellipse at 50% 0%, #00368a 0%, #001f54 50%, #00102e 100%);
   -webkit-overflow-scrolling: touch;
 }
 
@@ -162,33 +162,27 @@ input,
 
 .site-header {
   position: relative;
-  background: linear-gradient(180deg, #06173a 0%, #030d22 100%);
-  border-bottom: 1px solid rgba(var(--accent-rgb), 0.18);
-  padding: 55px 0 36px;
+  background: transparent;
+  padding: clamp(34px, 5vh, 52px) 0 12px;
   text-align: center;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .site-header::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 50% -10%, rgba(var(--accent-rgb), 0.12) 0%, transparent 65%);
+  background: radial-gradient(ellipse at 50% 50%, rgba(var(--accent-rgb), 0.14) 0%, transparent 65%);
   pointer-events: none;
 }
 
 .site-header::after {
-  content: "";
-  position: absolute;
-  top: 10px; left: 10px; right: 10px; bottom: 10px;
-  border-top: 1px solid rgba(var(--accent-rgb), 0.14);
-  border-bottom: 1px solid rgba(var(--accent-rgb), 0.14);
-  pointer-events: none;
+  display: none;
 }
 
 .site-header .container {
   position: relative;
-  z-index: 1;
+  z-index: 10;
 }
 
 .site-logo-link,
@@ -196,46 +190,59 @@ input,
 .site-logo-link:hover,
 .site-logo-link:active,
 .site-logo-link:focus {
-  display: block;
+  display: inline-block;
   text-decoration: none;
   color: inherit;
   outline: none;
 }
 
+.site-logo-img {
+  width: clamp(210px, 24vw, 260px);
+  height: clamp(210px, 24vw, 260px);
+  margin: 0 auto;
+  display: block;
+  border-radius: 50%;
+  filter: drop-shadow(0 14px 32px rgba(0, 0, 0, 0.75)) drop-shadow(0 0 45px rgba(250, 190, 18, 0.3));
+  transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.32s ease;
+}
+
+.site-logo-link:hover .site-logo-img {
+  transform: scale(1.05);
+  filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 65px rgba(250, 190, 18, 0.55));
+}
+
+.site-logo-img--small {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
 .site-header h1 {
-  margin: 0 0 18px;
-  font-size: clamp(2.97rem, 6.6vw, 5.72rem);
-  letter-spacing: 0.2em;
-  font-weight: 600;
-  text-transform: uppercase;
-  font-family: "Cinzel", serif;
-  background: linear-gradient(135deg, #ffd564 0%, #fcb813 48%, #c98e00 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  margin: 0;
 }
 
 .subtitle {
-  margin: 0;
-  color: rgba(239, 217, 162, 0.75);
-  font-size: 0.78rem;
-  letter-spacing: 0.36em;
-  text-transform: uppercase;
-  font-family: "Cinzel", serif;
-  font-weight: 400;
-  font-style: italic;
+  display: none !important;
 }
 
 /* ─── Ticker banner ──────────────────────────────────────────────────────── */
 
 .ticker-bar {
-  background: #00163b;
-  overflow: hidden;
-  white-space: nowrap;
-  border-top: 1px solid rgba(var(--accent-rgb), 0.25);
-  border-bottom: 2px solid var(--accent);
-  padding: 9px 0;
-  position: relative;
+  display: none !important;
+}
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 .ticker-track {
@@ -247,11 +254,11 @@ input,
 .ticker-text {
   display: inline-block;
   padding-right: 80px;
-  font-family: "Cinzel", serif;
-  font-size: 0.72rem;
-  font-weight: 500;
-  color: var(--accent);
-  letter-spacing: 0.2em;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #001438;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   text-shadow:
     0 0 8px rgba(var(--accent-rgb), 0.5),
@@ -285,7 +292,7 @@ input,
   padding: 10px 10px;
   background: rgba(var(--accent-rgb), 0.04);
   color: rgba(var(--accent-rgb), 0.65);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.66rem;
   font-weight: 500;
   letter-spacing: 0.1em;
@@ -367,7 +374,7 @@ input,
   border-radius: 999px;
   background: transparent;
   color: rgba(239, 217, 162, 0.6);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.66rem;
   font-weight: 500;
   letter-spacing: 0.1em;
@@ -402,7 +409,7 @@ input,
   padding: 0 14px 0 2px;
   margin-right: 4px;
   border-right: 1px solid rgba(var(--accent-rgb), 0.25);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -458,7 +465,7 @@ input,
   border: 1px solid rgba(var(--accent-rgb), 0.22);
   border-radius: 999px;
   color: var(--accent-light);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.78rem;
   letter-spacing: 0.08em;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
@@ -467,7 +474,7 @@ input,
 
 #searchInput::placeholder {
   color: rgba(var(--accent-rgb), 0.35);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   letter-spacing: 0.08em;
 }
 
@@ -536,7 +543,7 @@ input,
   border-radius: 999px;
   color: var(--accent);
   cursor: pointer;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.6rem;
   font-weight: 600;
   letter-spacing: 0.14em;
@@ -618,7 +625,7 @@ input,
   border-radius: 10px;
   background: transparent;
   color: rgba(239, 217, 162, 0.6);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.66rem;
   font-weight: 500;
   letter-spacing: 0.1em;
@@ -717,7 +724,7 @@ input::-moz-focus-inner {
 #resultsCount {
   margin: 0;
   color: rgba(var(--accent-rgb), 0.48);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.62rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -858,7 +865,7 @@ input::-moz-focus-inner {
 .coin-image-wrap.is-photoless::after {
   content: "Sin foto";
   color: rgba(var(--accent-rgb), 0.25);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.6rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -980,7 +987,7 @@ input::-moz-focus-inner {
   line-height: 1.15;
   color: var(--text);
   font-weight: 600;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   letter-spacing: 0.05em;
 }
 
@@ -1005,7 +1012,7 @@ input::-moz-focus-inner {
 
 .coin-meta {
   text-align: center;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-weight: 400;
   font-size: 0.82rem;
   letter-spacing: 0.07em;
@@ -1034,7 +1041,7 @@ input::-moz-focus-inner {
   border: 1px solid rgba(var(--accent-rgb), 0.3);
   background: linear-gradient(180deg, rgba(var(--accent-rgb), 0.1) 0%, rgba(var(--accent-rgb), 0.04) 100%);
   color: var(--accent);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.56rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -1072,7 +1079,7 @@ input::-moz-focus-inner {
   display: block;
   font-size: 1.2rem;
   font-weight: 600;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   letter-spacing: 0.04em;
 }
 
@@ -1117,7 +1124,7 @@ input::-moz-focus-inner {
   border-radius: 999px;
   background: linear-gradient(180deg, #d9bd7e 0%, #c9a227 100%);
   color: #14100a;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.5rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -1151,7 +1158,7 @@ input::-moz-focus-inner {
   padding: 7px 0;
   background: rgba(10, 7, 3, 0.94);
   color: var(--accent);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 0.30em;
@@ -1200,7 +1207,7 @@ input::-moz-focus-inner {
   padding: 30px;
   text-align: center;
   color: rgba(var(--accent-rgb), 0.5);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.78rem;
   letter-spacing: 0.12em;
 }
@@ -1218,7 +1225,7 @@ input::-moz-focus-inner {
   margin-bottom: 16px;
   color: rgba(var(--accent-rgb), 0.6);
   text-decoration: none;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.62rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -1334,7 +1341,7 @@ input::-moz-focus-inner {
 .detail-country {
   margin: 0 0 10px;
   color: rgba(var(--accent-rgb), 0.55);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-weight: 400;
   font-size: 0.68rem;
   letter-spacing: 0.3em;
@@ -1347,7 +1354,7 @@ input::-moz-focus-inner {
   color: var(--text);
   font-size: clamp(1.9rem, 3.4vw, 2.8rem);
   line-height: 1.02;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-align: center;
@@ -1379,7 +1386,7 @@ input::-moz-focus-inner {
 
 .detail-spec-label {
   color: rgba(var(--accent-rgb), 0.55);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.64rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -1396,7 +1403,7 @@ input::-moz-focus-inner {
 
 .detail-spec-value {
   color: var(--text);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.86rem;
   line-height: 1.35;
   white-space: nowrap;
@@ -1409,7 +1416,7 @@ input::-moz-focus-inner {
   font-size: clamp(1.7rem, 2.9vw, 2.38rem);
   line-height: 1;
   font-weight: 600;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   letter-spacing: 0.06em;
   text-align: center;
 }
@@ -1449,7 +1456,7 @@ input::-moz-focus-inner {
   border: none;
   background: linear-gradient(180deg, var(--success) 0%, var(--success-dark) 100%);
   color: white;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -1474,7 +1481,7 @@ input::-moz-focus-inner {
   border: 1px solid rgba(var(--accent-rgb), 0.5);
   background: transparent;
   color: var(--gold, #fcb813);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -1489,7 +1496,7 @@ input::-moz-focus-inner {
 .detail-error {
   padding: 30px 0;
   color: rgba(var(--accent-rgb), 0.45);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.8rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1538,7 +1545,7 @@ input::-moz-focus-inner {
 .sub-filter-btn-date {
   color: var(--accent);
   font-weight: 400;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.88em;
   letter-spacing: 0.08em;
   opacity: 0.8;
@@ -1625,7 +1632,29 @@ input::-moz-focus-inner {
   }
 
   /* ── Título en una sola línea, como en desktop ── */
-  .site-header h1 {
+  
+.site-logo-img {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 16px;
+  display: block;
+  border-radius: 50%;
+  filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.65));
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.28s ease;
+}
+
+.site-logo-link:hover .site-logo-img {
+  transform: scale(1.08);
+  filter: drop-shadow(0 6px 24px rgba(250, 190, 18, 0.6));
+}
+
+.site-logo-img--small {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 10px;
+}
+
+.site-header h1 {
     font-size: clamp(1.15rem, 5.6vw, 1.9rem); /* tamaño que deja entrar los 17 caracteres */
     letter-spacing: 0.06em;
     display: flex;
@@ -1920,7 +1949,29 @@ input::-moz-focus-inner {
   }
 
   /* ── 1. Título principal −30% en desktop ── */
-  .site-header h1 {
+  
+.site-logo-img {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 16px;
+  display: block;
+  border-radius: 50%;
+  filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.65));
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.28s ease;
+}
+
+.site-logo-link:hover .site-logo-img {
+  transform: scale(1.08);
+  filter: drop-shadow(0 6px 24px rgba(250, 190, 18, 0.6));
+}
+
+.site-logo-img--small {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 10px;
+}
+
+.site-header h1 {
     font-size: clamp(2.08rem, 4.62vw, 4rem); /* clamp original × 0.70 */
   }
 
@@ -1943,7 +1994,6 @@ input::-moz-focus-inner {
   }
 
   .ticker-track,
-  .landing-btn--all::after,
   .landing-btn.is-pressed::after,
   .landing-chip::after,
   .cat-btn.is-active::after {
@@ -2002,15 +2052,224 @@ body[data-view="catalog"] #catalog {
   display: block;
 }
 
+/* En la portada el footer va siempre al pie de la ventana (si la página queda
+   más corta, debajo de él se veía el fondo fijo de monedas) y el bloque logo +
+   botón se centra en el alto que sobra, en vez de quedar pegado arriba. */
+body[data-view="landing"] {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+
+body[data-view="landing"] .site-header,
+body[data-view="landing"] .site-footer {
+  margin-top: auto;
+}
+
+/* El halo dorado del header tiene bordes rectos arriba y abajo: sobre el fondo
+   de monedas se leía como una franja. La viñeta ya ilumina esa zona. */
+body[data-view="landing"] .site-header::before {
+  display: none;
+}
+
 .landing-screen {
-  min-height: calc(100svh - 180px);
+  position: relative;
+  min-height: calc(100svh - 260px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem 1rem 3rem;
+  padding: 1.5rem 1rem 3.5rem;
+}
+
+/* ── Fondo: monedas reales sobre azul noche ──────────────────────────────────
+   Va fijo a la ventana y en z-index -1: así cubre el header y la portada como
+   un solo lienzo (antes la viñeta de la sección cortaba una franja debajo del
+   logo) y queda por debajo de todo, incluido el footer, que tiene fondo propio.
+   Desaparece con #landing al pasar al catálogo.
+
+   Se anima el transform de cada moneda, nunca el del contenedor (trampa de
+   Safari con capas grandes), y en teléfonos no se anima ni se difumina. */
+
+.landing-coins-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Centro despejado para el logo y el botón; los bordes caen a casi negro. */
+.landing-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background:
+    radial-gradient(ellipse 40% 62% at 50% 32%, rgba(0, 18, 52, 0.85) 0%, rgba(0, 18, 52, 0.5) 50%, transparent 100%),
+    radial-gradient(ellipse 120% 95% at 50% 40%, transparent 55%, rgba(0, 6, 20, 0.85) 100%);
+}
+
+/* Grano de papel: rompe el degradé liso, que es lo que más delata "digital". */
+.landing-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Plata apagada y fría para que no compita con el dorado; sombra corta de
+   moneda apoyada, sin halo. Los tamaños van en vmax para que la composición
+   se mantenga entre pantallas anchas y altas. */
+.bg-coin {
+  position: absolute;
+  z-index: 2;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  --coin-filter: grayscale(0.35) brightness(0.78) contrast(1.06) drop-shadow(0 10px 14px rgba(0, 0, 0, 0.55));
+  filter: var(--coin-filter);
+  animation: coin-drift 48s ease-in-out infinite alternate;
+}
+
+/* Cercanas: grandes, cortadas por el borde, apenas fuera de foco. */
+.bg-coin--1 {
+  top: -9vmax;
+  left: -7vmax;
+  width: 30vmax;
+  background-image: url('images/bg-coins/patacon-libertad.webp');
+  opacity: 0.34;
+  filter: var(--coin-filter) blur(2.5px);
+  --coin-rot: -14deg;
+}
+
+.bg-coin--2 {
+  bottom: -6%;
+  right: -8vmax;
+  width: 34vmax;
+  background-image: url('images/bg-coins/sol-confederacion.webp');
+  opacity: 0.3;
+  filter: var(--coin-filter) blur(3px);
+  --coin-rot: 18deg;
+  animation-duration: 56s;
+}
+
+/* Medias: nítidas, son las que se leen. */
+.bg-coin--3 {
+  top: 8%;
+  right: 9%;
+  width: 15vmax;
+  background-image: url('images/bg-coins/escudo-20c.webp');
+  opacity: 0.4;
+  --coin-rot: 9deg;
+  animation-duration: 42s;
+  animation-delay: -12s;
+}
+
+.bg-coin--4 {
+  bottom: 30%;
+  left: 13%;
+  width: 17vmax;
+  background-image: url('images/bg-coins/patacon-escudo.webp');
+  opacity: 0.36;
+  --coin-rot: -7deg;
+  animation-duration: 52s;
+  animation-delay: -20s;
+}
+
+.bg-coin--5 {
+  top: 44%;
+  left: -3vmax;
+  width: 12vmax;
+  background-image: url('images/bg-coins/oudine-2c.webp');
+  opacity: 0.3;
+  --coin-rot: 22deg;
+  animation-duration: 45s;
+  animation-delay: -6s;
+}
+
+.bg-coin--6 {
+  top: 30%;
+  right: -2.5vmax;
+  width: 13vmax;
+  background-image: url('images/bg-coins/libertad-50c.webp');
+  opacity: 0.3;
+  --coin-rot: -16deg;
+  animation-duration: 50s;
+  animation-delay: -30s;
+}
+
+/* Lejanas: chicas y desenfocadas, dan profundidad. */
+.bg-coin--7 {
+  top: 58%;
+  left: 22%;
+  width: 6.5vmax;
+  background-image: url('images/bg-coins/oudine-2c.webp');
+  opacity: 0.2;
+  filter: var(--coin-filter) blur(3px);
+  --coin-rot: 40deg;
+  animation-duration: 60s;
+}
+
+.bg-coin--8 {
+  top: 6%;
+  right: 30%;
+  width: 7vmax;
+  background-image: url('images/bg-coins/libertad-50c.webp');
+  opacity: 0.18;
+  filter: var(--coin-filter) blur(3.5px);
+  --coin-rot: -30deg;
+  animation-duration: 58s;
+  animation-delay: -18s;
+}
+
+@keyframes coin-drift {
+  from { transform: translate3d(0, 0, 0) rotate(var(--coin-rot, 0deg)); }
+  to   { transform: translate3d(0, -8px, 0) rotate(calc(var(--coin-rot, 0deg) + 3deg)); }
+}
+
+/* Teléfonos: cuatro monedas en los bordes, quietas y nítidas (blur + transform
+   animado es lo que más le cuesta a Safari en móvil). */
+@media (max-width: 640px) {
+  .bg-coin {
+    animation: none;
+    transform: rotate(var(--coin-rot, 0deg));
+    filter: var(--coin-filter) !important;
+  }
+
+  .bg-coin--3,
+  .bg-coin--5,
+  .bg-coin--7,
+  .bg-coin--8 {
+    display: none;
+  }
+
+  .bg-coin--1 { top: -12vmax; left: -14vmax; width: 34vmax; opacity: 0.3; }
+  .bg-coin--2 { bottom: 30%; right: -18vmax; width: 34vmax; opacity: 0.26; }
+  .bg-coin--4 { bottom: 36%; left: -8vmax; width: 18vmax; opacity: 0.28; }
+  .bg-coin--6 { top: 21%; right: auto; left: -8vmax; width: 15vmax; opacity: 0.24; }
+}
+
+/* Tablet: se va la lejana de arriba, que ahí cae sobre el logo. */
+@media (min-width: 641px) and (max-width: 980px) {
+  .bg-coin--8 {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-coin {
+    animation: none;
+    transform: rotate(var(--coin-rot, 0deg));
+  }
 }
 
 .landing-inner {
+  position: relative;
+  z-index: 5;
   width: min(100%, 460px);
   display: flex;
   flex-direction: column;
@@ -2023,31 +2282,32 @@ body[data-view="catalog"] #catalog {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.1rem;
-  margin: 0 0 1.4rem; /* mitad del aire que tenía sobre "¿Qué estás buscando?" */
+  gap: 1.2rem;
+  margin: 0 0 1.6rem;
 }
 
 .hero-ornament__rule {
   flex: 1 1 0;
   max-width: 170px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.3));
+  background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.35));
 }
 
 .hero-ornament__rule:last-child {
-  background: linear-gradient(90deg, rgba(var(--accent-rgb), 0.3), transparent);
+  background: linear-gradient(90deg, rgba(var(--accent-rgb), 0.35), transparent);
 }
 
 .hero-ornament__gem {
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
   flex: 0 0 auto;
   transform: rotate(45deg);
-  background: rgba(var(--accent-rgb), 0.75);
+  background: rgba(var(--accent-rgb), 0.85);
+  box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.6);
 }
 
 .landing-heading {
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.7rem;
   font-weight: 400;
   color: rgba(var(--accent-rgb), 0.45);
@@ -2079,7 +2339,7 @@ body[data-view="catalog"] #catalog {
   border: 1px solid rgba(var(--accent-rgb), 0.14);
   border-radius: 10px;
   color: rgba(239, 217, 162, 0.7);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 1.07rem;
   font-weight: 400;
   text-align: center;
@@ -2121,7 +2381,7 @@ body[data-view="catalog"] #catalog {
 /* Mismo aro que el chip de "Ingresos semanales" (ver .landing-chip::after),
    pero disparado por clase en vez de latir en reposo: al tocar un filtro la
    portada se va enseguida, así que el latido de 3,2 s no se llegaría a ver.
-   Excluye al CTA "Ver todas", que ya usa su ::after para el barrido cta-shine. */
+   Excluye al CTA "Explorar el catálogo", que tiene su propio estado de hover. */
 .landing-btn:not(.landing-btn--all).is-pressed {
   z-index: 1; /* el aro se sale del botón; que no lo tape el vecino siguiente */
 }
@@ -2144,63 +2404,93 @@ body[data-view="catalog"] #catalog {
   to   { transform: scale(1.16); opacity: 0; }
 }
 
-/* ── Nivel 1: CTA principal ── */
+/* ── Nivel 1: CTA principal ──
+   Marco fino doble, como el borde de un billete o de un certificado: azul
+   noche translúcido, filete exterior dorado y uno interior más tenue. Sin
+   degradé, sin halo ni barrido de brillo. Al pasar el mouse se llena de oro
+   plano y el filete interior se vuelve azul. */
+
+.landing-tagline {
+  margin: 0 0 1.9rem;
+  font-family: "Cormorant Garamond", "Lora", Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.22rem;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: rgba(var(--accent-rgb), 0.72);
+}
 
 .landing-btn--all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: row;
-  gap: 0.9rem;
+  gap: 0.85rem;
   aspect-ratio: auto;
-  margin-bottom: 0.5rem;
-  padding: 1.2rem 1.4rem;
-  font-size: 1.21rem;
-  background: linear-gradient(150deg, #ffe07a 0%, #fcb813 55%, #b87e00 100%);
-  border-color: transparent;
-  color: #041433;
+  margin: 0 auto 2.2rem;
+  width: 100%;
+  max-width: 360px;
+  padding: 1.05rem 2rem;
+  background: rgba(0, 16, 44, 0.55);
+  border: 1px solid rgba(var(--accent-rgb), 0.75);
+  border-radius: 3px;
+  color: var(--accent-light);
+  font-family: "Cormorant Garamond", "Lora", Georgia, serif;
+  font-size: 1.38rem;
   font-weight: 600;
-  letter-spacing: 0.22em;
-  border-radius: 10px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
-  overflow: hidden; /* recorta el barrido de cta-shine dentro del botón */
+  letter-spacing: 0.08em;
+  text-transform: none;
+  line-height: 1.2;
+  cursor: pointer;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.2s ease;
 }
 
-/* Barrido de brillo, apenas insinuado, solo en hover */
-.landing-btn--all::after {
+.landing-btn--all::before {
   content: "";
   position: absolute;
-  top: -50%;
-  left: -75%;
-  width: 40%;
-  height: 200%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transform: skewX(-20deg);
-  opacity: 0;
+  inset: 4px;
+  border: 1px solid rgba(var(--accent-rgb), 0.35);
+  border-radius: 1px;
   pointer-events: none;
+  transition: border-color 0.25s ease;
 }
 
-.landing-btn--all:hover::after,
-.landing-btn--all:focus-visible::after {
-  animation: cta-shine 0.9s ease-out;
-}
-
-/* El destello se mueve con transform y no con `left`: recorre el mismo camino
-   (de -75% a 135% del ancho del botón) pero se compone en GPU en vez de
-   recalcular la posición en cada frame.
-   La cuenta: el recorrido es 210% del ancho del botón y el destello mide 40% de
-   ese ancho, así que en unidades del propio elemento son 210/40 = 525%. */
-@keyframes cta-shine {
-  0%   { transform: translateX(0) skewX(-20deg);      opacity: 0; }
-  18%  { opacity: 1; }
-  100% { transform: translateX(525%) skewX(-20deg);   opacity: 0; }
+.landing-btn__arrow {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+  transition: transform 0.25s ease;
 }
 
 .landing-btn--all:hover,
 .landing-btn--all:focus-visible {
-  filter: brightness(1.05);
-  border-color: transparent;
-  color: #041433;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    0 0 26px rgba(var(--accent-rgb), 0.18);
+  background: #e3b13a;
+  border-color: #e3b13a;
+  color: #041228;
+}
+
+.landing-btn--all:hover::before,
+.landing-btn--all:focus-visible::before {
+  border-color: rgba(4, 18, 40, 0.35);
+}
+
+.landing-btn--all:hover .landing-btn__arrow,
+.landing-btn--all:focus-visible .landing-btn__arrow {
+  transform: translateX(4px);
+}
+
+.landing-btn--all:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.landing-btn--all:active {
+  transform: translateY(1px);
 }
 
 /* ── Ingresos: divisor con filetes entre el CTA y las categorías ── */
@@ -2280,7 +2570,7 @@ body[data-view="catalog"] #catalog {
 }
 
 .landing-chip__label {
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 1.07rem;
   font-weight: 400;
   letter-spacing: 0.12em;
@@ -2343,7 +2633,7 @@ body[data-view="catalog"] #catalog {
 }
 
 .landing-social__label {
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.58rem;
   letter-spacing: 0.32em;
   text-indent: 0.32em;
@@ -2405,9 +2695,8 @@ body[data-view="landing"] .social-row--footer {
 /* ── Teléfonos: 2 columnas ── */
 @media (max-width: 640px) {
   .landing-screen {
-    min-height: calc(100svh - 160px);
-    align-items: flex-start;
-    padding-top: 1.25rem;
+    min-height: auto;
+    padding: 1.25rem 1rem 2.5rem;
   }
 
   .landing-nav {
@@ -2430,11 +2719,15 @@ body[data-view="landing"] .social-row--footer {
   }
 
   .landing-btn--all {
-    height: auto;
-    font-size: 1.04rem;    /* 0.9rem + 15% */
-    letter-spacing: 0.14em;
-    padding: 1rem 1.1rem;
+    max-width: 320px;
+    font-size: 1.26rem;
+    padding: 0.95rem 1.4rem;
     margin-bottom: 0.4rem;
+  }
+
+  .landing-tagline {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
   }
 
   .hero-ornament {
@@ -2484,14 +2777,35 @@ body[data-view="landing"] .social-row--footer {
 @media (min-width: 641px) and (max-width: 980px) {
   /* Esta banda no tenía override de tamaño: el clamp base desbordaba el ancho
      y el logotipo se cortaba de costado. */
-  .site-header h1 {
+  
+.site-logo-img {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 16px;
+  display: block;
+  border-radius: 50%;
+  filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.65));
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.28s ease;
+}
+
+.site-logo-link:hover .site-logo-img {
+  transform: scale(1.08);
+  filter: drop-shadow(0 6px 24px rgba(250, 190, 18, 0.6));
+}
+
+.site-logo-img--small {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 10px;
+}
+
+.site-header h1 {
     font-size: clamp(1.9rem, 5.4vw, 2.9rem);
   }
 
   .landing-screen {
-    min-height: calc(100svh - 220px);
-    align-items: flex-start;
-    padding-top: 1.25rem;
+    min-height: auto;
+    padding: 1.25rem 1rem 3rem;
   }
 
   .landing-inner {
@@ -2507,16 +2821,13 @@ body[data-view="landing"] .social-row--footer {
     letter-spacing: 0.04em; /* justo para que "Medallas / Libros" entre en una línea */
   }
 
-  .landing-btn--all {
-    font-size: 1.15rem;    /* 1rem + 15% */
-  }
+
 }
 
 /* ── Desktop: las 6 categorías en una sola fila ── */
 @media (min-width: 981px) {
   .landing-screen {
-    align-items: flex-start;
-    padding-top: 1.5rem;
+    padding: 1.25rem 1rem 3rem;
     min-height: auto;
   }
 
@@ -2545,8 +2856,7 @@ body[data-view="landing"] .social-row--footer {
   }
 
   .landing-btn--all {
-    font-size: 1.38rem;    /* 1.2rem + 15% */
-    padding: 1.25rem 1.75rem;
+    font-size: 1.45rem;
   }
 
   .landing-chip__label {
@@ -2555,6 +2865,128 @@ body[data-view="landing"] .social-row--footer {
 
   .landing-heading {
     font-size: 0.74rem;
+  }
+}
+
+/* ─── Portada: escala ────────────────────────────────────────────────────────
+   Logo, frase, botón y contacto a un tamaño de cartel: con los valores de
+   arriba todo quedaba chico en medio de la pantalla. Van con
+   body[data-view="landing"] para ganarle a los bloques de .site-logo-img que
+   están repetidos dentro de varios media queries; el catálogo usa los suyos. */
+
+body[data-view="landing"] .site-header .site-logo-img {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 6px;
+}
+
+body[data-view="landing"] .hero-ornament {
+  margin-bottom: 1.6rem;
+}
+
+body[data-view="landing"] .hero-ornament__rule {
+  max-width: 130px;
+}
+
+body[data-view="landing"] .landing-tagline {
+  font-size: 1.4rem;
+  margin-bottom: 1.8rem;
+}
+
+body[data-view="landing"] .landing-btn--all {
+  max-width: 360px;
+  font-size: 1.6rem;
+  padding: 1.15rem 1.5rem;
+}
+
+body[data-view="landing"] .landing-btn__arrow {
+  width: 24px;
+  height: 24px;
+}
+
+body[data-view="landing"] .landing-social__label {
+  font-size: 0.72rem;
+}
+
+body[data-view="landing"] .social-btn {
+  width: 46px;
+  height: 46px;
+}
+
+body[data-view="landing"] .social-btn svg {
+  width: 21px;
+  height: 21px;
+}
+
+@media (min-width: 641px) {
+  body[data-view="landing"] .site-header .site-logo-img {
+    width: 190px;
+    height: 190px;
+    margin-bottom: 10px;
+  }
+
+  body[data-view="landing"] .hero-ornament {
+    margin-bottom: 2rem;
+  }
+
+  body[data-view="landing"] .hero-ornament__rule {
+    max-width: 210px;
+  }
+
+  body[data-view="landing"] .landing-tagline {
+    font-size: 1.85rem;
+    margin-bottom: 2.3rem;
+  }
+
+  body[data-view="landing"] .landing-btn--all {
+    max-width: 500px;
+    font-size: 2.05rem;
+    padding: 1.4rem 2.6rem;
+    gap: 1.1rem;
+  }
+
+  body[data-view="landing"] .landing-btn--all::before {
+    inset: 5px;
+  }
+
+  body[data-view="landing"] .landing-btn__arrow {
+    width: 30px;
+    height: 30px;
+  }
+
+  body[data-view="landing"] .landing-social {
+    margin-top: 3.2rem;
+  }
+
+  body[data-view="landing"] .landing-social__label {
+    font-size: 0.8rem;
+  }
+
+  body[data-view="landing"] .social-btn {
+    width: 52px;
+    height: 52px;
+  }
+
+  body[data-view="landing"] .social-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Pantallas grandes: un escalón más. */
+@media (min-width: 1280px) and (min-height: 760px) {
+  body[data-view="landing"] .site-header .site-logo-img {
+    width: 220px;
+    height: 220px;
+  }
+
+  body[data-view="landing"] .landing-tagline {
+    font-size: 2.05rem;
+  }
+
+  body[data-view="landing"] .landing-btn--all {
+    max-width: 540px;
+    font-size: 2.2rem;
   }
 }
 
@@ -2571,7 +3003,7 @@ body[data-view="landing"] .social-row--footer {
 }
 
 .variants-heading {
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.8rem;
   font-weight: 500;
   color: var(--muted);
@@ -2587,7 +3019,7 @@ body[data-view="landing"] .social-row--footer {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.82rem;
   font-weight: 500;
   color: var(--accent);
@@ -2684,7 +3116,7 @@ body[data-view="landing"] .social-row--footer {
 .variant-year {
   font-size: 0.86rem;
   font-weight: 600;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   letter-spacing: 0.1em;
   color: var(--text);
   line-height: 1;
@@ -2692,7 +3124,7 @@ body[data-view="landing"] .social-row--footer {
 
 .variant-price {
   font-size: 1.21rem;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   color: var(--accent);
   white-space: nowrap;
   overflow: hidden;
@@ -2737,7 +3169,7 @@ body[data-view="landing"] .social-row--footer {
 
 .footer-est {
   margin: 0;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.72rem;
   font-weight: 500;
   letter-spacing: 0.3em;
@@ -2747,7 +3179,7 @@ body[data-view="landing"] .social-row--footer {
 
 .footer-tagline {
   margin: 0;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.58rem;
   font-weight: 400;
   letter-spacing: 0.24em;
@@ -2944,7 +3376,28 @@ body[data-view="catalog"] .np-monogram, .dm-monogram, .brand-monogram {
   flex: 0 0 auto;
 }
 
-body[data-view="catalog"] .site-header h1 {
+body[data-view="catalog"] .site-logo-img {
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  display: block;
+  border-radius: 50%;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.28s ease;
+}
+
+.site-logo-link:hover .site-logo-img {
+  transform: scale(1.06);
+  filter: drop-shadow(0 4px 14px rgba(250, 190, 18, 0.6));
+}
+
+.site-logo-img--small {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto;
+}
+
+.site-header h1 {
   display: block;
   margin: 0;
   font-size: clamp(1.26rem, 2.88vw, 1.92rem); /* +20% sobre 1.05/2.4/1.6 */
@@ -3049,7 +3502,28 @@ body.is-logo-morphing .site-header .container {
    ───────────────────────────────────────────────────────────────────────────── */
 
 body[data-view="catalog"] .np-monogram, .dm-monogram, .brand-monogram,
-body[data-view="catalog"] .site-header h1 {
+body[data-view="catalog"] .site-logo-img {
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  display: block;
+  border-radius: 50%;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.28s ease;
+}
+
+.site-logo-link:hover .site-logo-img {
+  transform: scale(1.06);
+  filter: drop-shadow(0 4px 14px rgba(250, 190, 18, 0.6));
+}
+
+.site-logo-img--small {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto;
+}
+
+.site-header h1 {
   transition: filter 420ms ease;
 }
 
@@ -3156,7 +3630,28 @@ body[data-view="catalog"].is-in-grid .to-top {
 
   /* Anula el bloque flex de la cabecera grande en mobile: acá el h1 es un
      bloque más dentro del flex del enlace. */
-  body[data-view="catalog"] .site-header h1 {
+  body[data-view="catalog"] .site-logo-img {
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  display: block;
+  border-radius: 50%;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.28s ease;
+}
+
+.site-logo-link:hover .site-logo-img {
+  transform: scale(1.06);
+  filter: drop-shadow(0 4px 14px rgba(250, 190, 18, 0.6));
+}
+
+.site-logo-img--small {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto;
+}
+
+.site-header h1 {
     display: block;
     margin: 0;
     /* El título mide ~13.6em; el espacio es el ancho menos 160px (monograma, margen
@@ -3249,7 +3744,7 @@ body[data-view="landing"] .currency-toggle-btn {
   justify-content: center;
   cursor: pointer;
   user-select: none;
-  font-family: "Cinzel", Georgia, serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -3341,7 +3836,7 @@ body[data-view="landing"] .currency-toggle-btn {
   border-radius: 2px;
   background: var(--accent);
   color: #030d22;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.65rem;
   font-weight: 700;
   line-height: 17px;
@@ -3433,7 +3928,7 @@ html.cart-drawer-lock {
 }
 
 .cart-drawer__tag {
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.88rem;
   font-weight: 600;
   color: var(--accent-light);
@@ -3441,7 +3936,7 @@ html.cart-drawer-lock {
 }
 
 .cart-drawer__count {
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.76rem;
   color: var(--muted);
 }
@@ -3456,7 +3951,7 @@ html.cart-drawer-lock {
   background: none;
   border: none;
   color: var(--muted);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.7rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -3488,7 +3983,7 @@ html.cart-drawer-lock {
   background: none;
   border: none;
   color: var(--muted);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.72rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -3505,7 +4000,7 @@ html.cart-drawer-lock {
 }
 
 .cart-step-pill {
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.7rem;
   letter-spacing: 0.14em;
   color: var(--accent);
@@ -3536,7 +4031,7 @@ html.cart-drawer-lock {
 }
 
 .cart-empty-title {
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.95rem;
   color: var(--text);
   letter-spacing: 0.1em;
@@ -3593,7 +4088,7 @@ html.cart-drawer-lock {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.65rem;
   color: rgba(var(--accent-rgb), 0.3);
 }
@@ -3613,7 +4108,7 @@ html.cart-drawer-lock {
 
 .cart-item__title {
   margin: 0;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.82rem;
   font-weight: 600;
   color: var(--text);
@@ -3648,7 +4143,7 @@ html.cart-drawer-lock {
 }
 
 .cart-grade-badge {
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.64rem;
   color: var(--accent);
   letter-spacing: 0.05em;
@@ -3658,7 +4153,7 @@ html.cart-drawer-lock {
   display: flex;
   align-items: baseline;
   gap: 6px;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
 .cart-price-primary,
@@ -3694,7 +4189,7 @@ html.cart-drawer-lock {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.8rem;
   color: var(--muted);
   margin-bottom: 4px;
@@ -3770,7 +4265,7 @@ html.cart-drawer-lock {
   min-height: 44px;
   padding: 10px 16px;
   border-radius: 4px;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -3817,7 +4312,7 @@ html.cart-drawer-lock {
 
 .section-label {
   display: block;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.68rem;
   font-weight: 600;
   color: var(--accent);
@@ -3887,7 +4382,7 @@ html.cart-drawer-lock {
 
 .delivery-row__name {
   display: block;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.8rem;
   color: var(--text);
   letter-spacing: 0.04em;
@@ -3900,7 +4395,7 @@ html.cart-drawer-lock {
 }
 
 .delivery-row__price {
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--accent-light);
@@ -3924,7 +4419,7 @@ html.cart-drawer-lock {
 }
 
 .delivery-parque-card__title {
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.74rem;
   color: var(--accent);
   letter-spacing: 0.04em;
@@ -3954,7 +4449,7 @@ html.cart-drawer-lock {
 
 .form-group label {
   display: block;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.66rem;
   letter-spacing: 0.12em;
   color: var(--muted);
@@ -4058,7 +4553,7 @@ html.cart-drawer-lock {
 }
 
 .order-spec-row--total {
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   color: var(--text);
   letter-spacing: 0.08em;
   margin-bottom: 0;
@@ -4111,7 +4606,7 @@ html.cart-drawer-lock {
 
 .payment-row__title {
   display: block;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.82rem;
   color: var(--text);
   letter-spacing: 0.04em;
@@ -4148,7 +4643,7 @@ html.cart-drawer-lock {
 
 .confirmed-title {
   margin: 0 0 4px;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.95rem;
   letter-spacing: 0.15em;
   color: var(--accent-light);
@@ -4171,14 +4666,14 @@ html.cart-drawer-lock {
 }
 
 .callout-label {
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.7rem;
   letter-spacing: 0.12em;
   color: var(--muted);
 }
 
 .callout-val {
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 1.25rem;
   color: var(--accent-light);
   letter-spacing: 0.05em;
@@ -4207,7 +4702,7 @@ html.cart-drawer-lock {
 
 .spec-label {
   width: 75px;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.66rem;
   letter-spacing: 0.12em;
   color: var(--muted);
@@ -4233,7 +4728,7 @@ html.cart-drawer-lock {
   background: none;
   border: 1px solid rgba(var(--accent-rgb), 0.3);
   color: var(--accent);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.64rem;
   letter-spacing: 0.1em;
   padding: 3px 8px;
@@ -4280,7 +4775,7 @@ html.cart-drawer-lock {
   background: transparent;
   border: 1px solid rgba(var(--accent-rgb), 0.35);
   color: var(--accent);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -4310,7 +4805,7 @@ html.cart-drawer-lock {
   background: #051330;
   border: 1px solid rgba(var(--accent-rgb), 0.3);
   color: var(--text);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.76rem;
   letter-spacing: 0.08em;
   padding: 8px 16px;
@@ -4342,7 +4837,7 @@ html.cart-drawer-lock {
   background: none;
   border: none;
   color: var(--accent);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.74rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -4736,7 +5231,7 @@ html.cart-drawer-lock {
   margin: 18px 0 4px;
   padding-top: 14px;
   border-top: 1px solid rgba(var(--accent-rgb), 0.18);
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.68rem;
   letter-spacing: 0.14em;
   color: var(--accent);
@@ -4750,7 +5245,7 @@ html.cart-drawer-lock {
   padding: 1px 6px;
   border: 1px solid rgba(var(--accent-rgb), 0.5);
   border-radius: 2px;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.58rem;
   letter-spacing: 0.1em;
   color: var(--accent);
@@ -4854,7 +5349,7 @@ html.cart-drawer-lock {
 }
 
 .checkout-consult-alert strong {
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.7rem;
   letter-spacing: 0.1em;
   color: var(--accent);
@@ -4868,7 +5363,7 @@ html.cart-drawer-lock {
 }
 
 .cart-last-order__label {
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.64rem;
   letter-spacing: 0.1em;
   color: var(--accent);
@@ -4885,7 +5380,7 @@ html.cart-drawer-lock {
 
 .confirmed-order-id {
   margin: 4px 0 8px;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.8rem;
   letter-spacing: 0.12em;
   color: var(--accent);
@@ -5092,7 +5587,7 @@ html.cart-drawer-lock {
 }
 
 .discount-applied__label {
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -5107,7 +5602,7 @@ html.cart-drawer-lock {
   background: none;
   border: none;
   color: #030d22;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -5139,7 +5634,7 @@ html.cart-drawer-lock {
   padding: 0 5px;
   border: 1px solid rgba(var(--accent-rgb), 0.5);
   border-radius: 2px;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.56rem;
   letter-spacing: 0.08em;
   color: var(--accent);
@@ -5203,307 +5698,6 @@ html.cart-drawer-lock {
   overflow-wrap: anywhere;
 }
 
-/* ── Pop-up de Novedades (Portada) ────────────────────────────────────────── */
-
-html.news-modal-lock {
-  overflow: hidden;
-}
-
-/* Fondo atenuado de la página */
-.news-modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.82);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  z-index: 2000;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  box-sizing: border-box;
-}
-
-.news-modal-backdrop.is-open {
-  display: flex !important;
-  animation: news-backdrop-fade 220ms ease-out forwards;
-}
-
-@keyframes news-backdrop-fade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-/* En la vista de catálogo el modal nunca se muestra */
-body[data-view="catalog"] .news-modal-backdrop,
-body:not([data-view="landing"]) .news-modal-backdrop {
-  display: none !important;
-}
-
-/* Tarjeta central: minimalista, profesional, geométrica, sin bordes redondeados */
-.news-modal {
-  position: relative;
-  width: 100%;
-  max-width: 680px;
-  max-height: calc(100svh - 32px);
-  max-height: calc(100dvh - 32px);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  margin: auto;
-  background: #041129;
-  color: #f5f5f5;
-  border-radius: 0;
-  border: 1px solid rgba(var(--accent-rgb), 0.45);
-  box-shadow:
-    0 24px 64px rgba(0, 0, 0, 0.95),
-    0 0 35px rgba(var(--accent-rgb), 0.12);
-  padding: 34px 38px 28px;
-  box-sizing: border-box;
-}
-
-.news-modal-backdrop.is-open .news-modal {
-  animation: news-card-pop 260ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes news-card-pop {
-  from { transform: scale(0.96); opacity: 0; }
-  to   { transform: scale(1);    opacity: 1; }
-}
-
-/* Botón de cierre X en la esquina superior derecha: cuadrado nítido sin bordes redondeados */
-.news-modal-close {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  width: 36px;
-  height: 36px;
-  border-radius: 0;
-  border: 1px solid rgba(var(--accent-rgb), 0.28);
-  background: rgba(255, 255, 255, 0.02);
-  color: var(--accent-light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 0;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-  z-index: 10;
-  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
-}
-
-/* Área táctil extendida para dedos en móvil (mínimo 48x48px según estándares móviles) */
-.news-modal-close::before {
-  content: "";
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  bottom: -8px;
-  left: -8px;
-}
-
-.news-modal-close svg {
-  width: 18px;
-  height: 18px;
-}
-
-.news-modal-close:hover,
-.news-modal-close:focus-visible {
-  background: rgba(var(--accent-rgb), 0.15);
-  border-color: var(--accent);
-  color: #ffffff;
-}
-
-/* Encabezado: solo el título con filete dorado sobrio */
-.news-modal-header {
-  padding-right: 48px;
-  margin-bottom: 22px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid rgba(var(--accent-rgb), 0.22);
-}
-
-.news-modal-title {
-  margin: 0;
-  font-family: "Cinzel", Georgia, serif;
-  font-size: 1.45rem;
-  font-weight: 700;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  color: var(--accent-light);
-  line-height: 1.22;
-}
-
-/* Lista de novedades: limpia, sobria, sin recuadros interiores */
-.news-modal-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.news-modal-item {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 2px 0;
-  background: transparent;
-  border: none;
-}
-
-.news-modal-icon-wrap {
-  flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--accent);
-}
-
-.news-modal-icon-wrap svg {
-  width: 22px;
-  height: 22px;
-}
-
-.news-modal-text {
-  flex: 1 1 auto;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  min-width: 0;
-}
-
-.news-modal-text strong {
-  display: block;
-  font-family: "Cinzel", Georgia, serif;
-  font-size: 0.94rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--accent-light);
-  line-height: 1.25;
-  margin-bottom: 3px;
-}
-
-.news-modal-text span {
-  display: block;
-  font-size: 0.88rem;
-  color: #dcd3c5;
-  line-height: 1.35;
-}
-
-/* Botón inferior de confirmación / cierre táctil */
-.news-modal-dismiss-btn {
-  display: block;
-  width: 100%;
-  margin-top: 22px;
-  padding: 12px 18px;
-  background: rgba(var(--accent-rgb), 0.08);
-  border: 1px solid rgba(var(--accent-rgb), 0.38);
-  border-radius: 0;
-  color: var(--accent-light);
-  font-family: "Cinzel", Georgia, serif;
-  font-size: 0.86rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  text-align: center;
-  cursor: pointer;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
-}
-
-.news-modal-dismiss-btn:hover,
-.news-modal-dismiss-btn:active {
-  background: rgba(var(--accent-rgb), 0.22);
-  border-color: var(--accent);
-  color: #ffffff;
-}
-
-/* En pantallas medianas y grandes, cada comentario ocupa 1 sola fila sin partirse */
-@media (min-width: 621px) {
-  .news-modal-text span {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
-/* Adaptación móvil óptima */
-@media (max-width: 680px) {
-  .news-modal-backdrop {
-    padding: 12px;
-    align-items: center;
-  }
-
-  .news-modal {
-    padding: 22px 16px 18px;
-    max-width: 100%;
-    max-height: calc(100dvh - 24px);
-  }
-
-  .news-modal-close {
-    top: 14px;
-    right: 14px;
-    width: 36px;
-    height: 36px;
-  }
-
-  .news-modal-header {
-    margin-bottom: 14px;
-    padding-bottom: 12px;
-    padding-right: 44px;
-  }
-
-  .news-modal-title {
-    font-size: 1.15rem;
-    letter-spacing: 0.08em;
-  }
-
-  .news-modal-list {
-    gap: 13px;
-  }
-
-  .news-modal-item {
-    padding: 2px 0;
-    gap: 12px;
-  }
-
-  .news-modal-icon-wrap {
-    width: 26px;
-    height: 26px;
-  }
-
-  .news-modal-icon-wrap svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  .news-modal-text strong {
-    font-size: 0.82rem;
-    margin-bottom: 2px;
-  }
-
-  .news-modal-text span {
-    font-size: 0.78rem;
-    white-space: normal;
-    overflow-wrap: break-word;
-    line-height: 1.32;
-  }
-
-  .news-modal-dismiss-btn {
-    margin-top: 18px;
-    padding: 11px 14px;
-    font-size: 0.8rem;
-  }
-}
-
-
 /* ─── Links legales del pie (envíos, términos, privacidad, arrepentimiento) ───
    El Botón de arrepentimiento tiene que verse en la portada (Res. SCI 424/2020):
    por eso este bloque NO se oculta en data-view="landing". */
@@ -5550,7 +5744,7 @@ body:not([data-view="landing"]) .news-modal-backdrop {
 }
 
 .legal-page h1 {
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-weight: 600;
   font-size: clamp(1.5rem, 4vw, 2.1rem);
   letter-spacing: 0.06em;
@@ -5565,7 +5759,7 @@ body:not([data-view="landing"]) .news-modal-backdrop {
 }
 
 .legal-page h2 {
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-weight: 600;
   font-size: 1.05rem;
   letter-spacing: 0.08em;
@@ -5607,7 +5801,7 @@ body:not([data-view="landing"]) .news-modal-backdrop {
 .legal-form label {
   display: grid;
   gap: 6px;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 0.72rem;
   letter-spacing: 0.14em;
   color: var(--muted);
@@ -5636,7 +5830,7 @@ body:not([data-view="landing"]) .news-modal-backdrop {
 
 .legal-form button {
   justify-self: start;
-  font-family: "Cinzel", serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   font-weight: 600;
   font-size: 0.85rem;
   letter-spacing: 0.12em;

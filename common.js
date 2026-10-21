@@ -383,6 +383,41 @@ function escapeHTML(value) {
     .replace(/'/g, '&#039;');
 }
 
+// La usa detalle.js para el fundido de los bloques de la ficha (clase is-visible).
+function createRevealObserver(items) {
+  if (!('IntersectionObserver' in window)) {
+    items.forEach(item => item.classList.add('is-visible'));
+    return null;
+  }
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      obs.unobserve(entry.target);
+    });
+  }, { threshold: 0.12 });
+  items.forEach(item => observer.observe(item));
+  return observer;
+}
+
+// ─── Desplazamiento instantáneo (cross-browser / Firefox) ──────────────────────
+// Firefox no siempre anula `html { scroll-behavior: smooth }` con `behavior: 'instant'`.
+// Deshabilitar temporalmente el scroll suave en el elemento raíz asegura un salto
+// inmediato sin animar miles de píxeles al restaurar la posición de la grilla.
+function instantScrollTo(top = 0) {
+  const html = document.documentElement;
+  const prev = html.style.scrollBehavior;
+  html.style.scrollBehavior = 'auto';
+  window.scrollTo({ top, behavior: 'instant' });
+  html.style.scrollBehavior = prev;
+}
+
+// ─── SVG ─────────────────────────────────────────────────────────────────────
+// Flechas del carrusel de fotos de cada tarjeta (buildCoinCard en script.js).
+
+const SVG_CHEVRON_LEFT  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>`;
+const SVG_CHEVRON_RIGHT = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>`;
+
 document.addEventListener('DOMContentLoaded', () => {
   applyConfigToPage();
 });
